@@ -1,0 +1,2609 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TEN - Excel para Entrenadores de Natación</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #3966ad;
+            --secondary-color: #3eb3f6;
+            --accent-color: #3966ad;
+            --text-dark: #1a1a1a;
+            --text-light: #a6a6a6;
+            --bg-light: #f8f8f8;
+            --white: #ffffff;
+            --gradient: linear-gradient(135deg, #3966ad 0%, #3eb3f6 100%);
+            --light-blue: #a8c7e4;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            color: var(--text-dark);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* Header & Navigation */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            height: 80px;
+            width: auto;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--gradient);
+            position: relative;
+            overflow: hidden;
+            padding-top: 80px;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('images/hover-nadador.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.3;
+            z-index: 0;
+            animation: parallax-bg 20s ease-in-out infinite;
+        }
+
+        @keyframes parallax-bg {
+            0%, 100% {
+                transform: scale(1) translateY(0);
+            }
+            50% {
+                transform: scale(1.1) translateY(-20px);
+            }
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient);
+            opacity: 0.3;
+            z-index: 0;
+        }
+
+        @keyframes move {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 7vw, 5.5rem);
+            font-weight: 800;
+            color: var(--white);
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
+            animation: fadeInUp 1s ease-out 0.2s both;
+        }
+
+        .hero p {
+            animation: fadeInUp 1s ease-out 0.4s both;
+        }
+
+        .hero .cta-buttons {
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+
+        .hero p {
+            font-size: clamp(1.1rem, 2vw, 1.5rem);
+            color: rgba(255, 255, 255, 0.95);
+            margin-bottom: 2.5rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            box-shadow: 0 8px 20px rgba(57, 102, 173, 0.3);
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn svg {
+            width: 20px;
+            height: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .btn:hover svg {
+            transform: translateX(3px) scale(1.1);
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--white) 0%, var(--light-blue) 100%);
+            color: var(--primary-color);
+            border: 2px solid transparent;
+            box-shadow: 0 8px 25px rgba(57, 102, 173, 0.4),
+                        0 0 0 0 rgba(255, 255, 255, 0.5);
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-primary::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(62, 179, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(57, 102, 173, 0.15) 0%, transparent 50%),
+                url('data:image/svg+xml;utf8,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="waves" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M0 20 Q10 10, 20 20 T40 20" stroke="rgba(57,102,173,0.15)" fill="none" stroke-width="1.5"/><path d="M0 25 Q10 15, 20 25 T40 25" stroke="rgba(62,179,246,0.1)" fill="none" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23waves)"/></svg>'),
+                url('data:image/svg+xml;utf8,<svg width="60" height="60" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="sparkles" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1.5" fill="rgba(62,179,246,0.2)"><animate attributeName="opacity" values="0.2;0.8;0.2" dur="2s" repeatCount="indefinite"/></circle></pattern></defs><rect width="60" height="60" fill="url(%23sparkles)"/></svg>');
+            background-size: 200% 200%, 200% 200%, 40px 40px, 30px 30px;
+            background-position: 0% 0%, 100% 100%, 0 0, 15px 15px;
+            border-radius: 50px;
+            opacity: 0;
+            transition: opacity 0.4s ease, background-position 0.6s ease;
+            z-index: -1;
+        }
+
+        .btn-primary:hover::after {
+            opacity: 1;
+            background-position: 50% 50%, 50% 50%, 20px 20px;
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: 0% 0%, 100% 100%, 0 0;
+            }
+            50% {
+                background-position: 100% 100%, 0% 0%, 40px 40px;
+            }
+            100% {
+                background-position: 0% 0%, 100% 100%, 0 0;
+            }
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(57, 102, 173, 0.5),
+                        0 0 30px rgba(62, 179, 246, 0.4),
+                        inset 0 0 60px rgba(255, 255, 255, 0.2);
+            background: linear-gradient(135deg, #ffffff 0%, var(--secondary-color) 100%);
+            color: var(--white);
+        }
+
+        .btn-primary:active {
+            transform: translateY(-2px) scale(1.02);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--white);
+            border: 2px solid var(--white);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-secondary::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.2) 0%, transparent 50%),
+                url('data:image/svg+xml;utf8,<svg width="60" height="60" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="dots" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1.5" fill="rgba(255,255,255,0.2)"/></pattern></defs><rect width="60" height="60" fill="url(%23dots)"/></svg>');
+            background-size: 200% 200%, 20px 20px;
+            background-position: 0% 0%, 0 0;
+            border-radius: 50px;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: -1;
+        }
+
+        .btn-secondary:hover::after {
+            opacity: 1;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                background-position: 0% 0%, 0 0;
+            }
+            50% {
+                background-position: 100% 100%, 20px 20px;
+            }
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.9) 100%);
+            color: var(--primary-color);
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(255, 255, 255, 0.3),
+                        0 0 30px rgba(255, 255, 255, 0.2),
+                        inset 0 0 40px rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.8);
+        }
+
+        .btn-secondary:active {
+            transform: translateY(-2px) scale(1.02);
+        }
+
+        /* Section Styles */
+        section {
+            padding: 6rem 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            text-align: center;
+            margin: 0 auto 1rem auto;
+            color: var(--accent-color);
+            position: relative;
+            display: block;
+            width: 100%;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.6s ease;
+        }
+
+        .section-title.animate::after {
+            width: 80px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: var(--text-light);
+            margin-bottom: 4rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Modalities Section */
+        .modalities-section {
+            background: var(--bg-light);
+            padding: 4rem 2rem;
+        }
+
+        .modalities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+            margin-top: 3rem;
+            max-width: 1000px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .modality-card {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: 24px;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 2px solid transparent;
+            box-shadow: 0 8px 25px rgba(57, 102, 173, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .modality-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(62, 179, 246, 0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .modality-card:hover::before {
+            opacity: 1;
+        }
+
+        .modality-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 50px rgba(57, 102, 173, 0.25),
+                        0 0 40px rgba(62, 179, 246, 0.2);
+            border-color: var(--secondary-color);
+        }
+
+        .modality-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            color: var(--primary-color);
+            transition: all 0.4s ease;
+        }
+
+        .modality-card:hover .modality-icon {
+            transform: scale(1.15) rotate(5deg);
+        }
+
+        .modality-icon svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 4px 8px rgba(57, 102, 173, 0.3));
+        }
+
+        .modality-card h3 {
+            font-size: 1.8rem;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .modality-card .modality-date {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--white);
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin: 1.5rem 0;
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(57, 102, 173, 0.3);
+        }
+
+        .modality-card p {
+            color: var(--text-light);
+            line-height: 1.8;
+            font-size: 1.05rem;
+        }
+
+        .modality-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--gradient);
+            color: var(--white);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Course Features */
+        .features {
+            background: var(--white);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, var(--white) 0%, var(--bg-light) 100%);
+            padding: 2.5rem;
+            border-radius: 24px;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 2px solid transparent;
+            box-shadow: 0 5px 20px rgba(57, 102, 173, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(62, 179, 246, 0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(57, 102, 173, 0.3),
+                        0 0 40px rgba(62, 179, 246, 0.2);
+            border-color: var(--secondary-color);
+            background: linear-gradient(135deg, var(--white) 0%, rgba(62, 179, 246, 0.05) 100%);
+        }
+
+        .feature-card:active {
+            transform: translateY(-10px) scale(1.01);
+        }
+
+        .feature-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 1.5rem;
+            color: var(--primary-color);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            z-index: 1;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .feature-card:nth-child(2) .feature-icon {
+            animation-delay: 0.5s;
+        }
+
+        .feature-card:nth-child(3) .feature-icon {
+            animation-delay: 1s;
+        }
+
+        .feature-card:nth-child(4) .feature-icon {
+            animation-delay: 1.5s;
+        }
+
+        .feature-card:nth-child(5) .feature-icon {
+            animation-delay: 2s;
+        }
+
+        .feature-card:nth-child(6) .feature-icon {
+            animation-delay: 2.5s;
+        }
+
+        .feature-icon svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 4px 8px rgba(57, 102, 173, 0.3));
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: scale(1.2) rotate(8deg);
+        }
+
+        .feature-card:hover .feature-icon svg {
+            filter: drop-shadow(0 12px 20px rgba(62, 179, 246, 0.6));
+            color: var(--secondary-color);
+        }
+
+        .feature-card h3 {
+            transition: all 0.4s ease;
+        }
+
+        .feature-card:hover h3 {
+            color: var(--secondary-color);
+            transform: scale(1.05);
+        }
+
+        .link-card .feature-icon {
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--accent-color);
+        }
+
+        .feature-card p {
+            color: var(--text-light);
+            line-height: 1.8;
+        }
+
+        /* About Instructor */
+        .instructor {
+            background: var(--bg-light);
+        }
+
+        .instructor-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 4rem;
+            align-items: center;
+            margin-top: 3rem;
+        }
+
+        .instructor-photo {
+            text-align: center;
+        }
+
+        .instructor-photo {
+            position: relative;
+        }
+
+        .instructor-photo::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 24px;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: -1;
+        }
+
+        .instructor-photo:hover::before {
+            opacity: 0.3;
+        }
+
+        .instructor-photo img {
+            width: 100%;
+            max-width: 400px;
+            border-radius: 20px;
+            box-shadow: 0 15px 50px rgba(57, 102, 173, 0.25);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 3px solid transparent;
+            animation: rotateIn 1s ease-out;
+        }
+
+        .instructor-photo:hover img {
+            transform: scale(1.05) rotate(2deg);
+            box-shadow: 0 25px 70px rgba(57, 102, 173, 0.4),
+                        0 0 50px rgba(62, 179, 246, 0.3);
+            border-color: var(--secondary-color);
+        }
+
+        .instructor-photo-placeholder {
+            display: none;
+        }
+
+        .instructor-bio h3 {
+            font-size: 2rem;
+            color: var(--accent-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .instructor-bio p {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            line-height: 1.9;
+        }
+
+        .instructor-bio a {
+            color: var(--primary-color);
+            text-decoration: underline;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .instructor-bio a:hover {
+            color: var(--secondary-color);
+        }
+
+        /* Videos Section */
+        .videos-section {
+            background: var(--white);
+        }
+
+        .videos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+            margin-top: 3rem;
+        }
+
+        .video-card {
+            background: linear-gradient(135deg, var(--white) 0%, var(--bg-light) 100%);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(57, 102, 173, 0.15);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 2px solid transparent;
+            position: relative;
+        }
+
+        .video-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(62, 179, 246, 0.1) 0%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .video-card:hover::before {
+            opacity: 1;
+        }
+
+        .video-card:hover {
+            transform: translateY(-15px) scale(1.03);
+            box-shadow: 0 25px 60px rgba(57, 102, 173, 0.3),
+                        0 0 50px rgba(62, 179, 246, 0.25);
+            border-color: var(--secondary-color);
+        }
+
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            background: #000;
+            overflow: hidden;
+        }
+
+        .video-wrapper iframe,
+        .video-wrapper video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .video-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .video-placeholder-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .video-info {
+            padding: 2rem;
+        }
+
+        .video-info h3 {
+            font-size: 1.5rem;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+
+        .video-info p {
+            color: var(--text-light);
+            line-height: 1.8;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            background: var(--bg-light);
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+            margin-top: 3rem;
+        }
+
+        .testimonial-card {
+            background: linear-gradient(135deg, var(--white) 0%, var(--bg-light) 100%);
+            padding: 2.5rem;
+            border-radius: 24px;
+            position: relative;
+            box-shadow: 0 8px 25px rgba(57, 102, 173, 0.15);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 2px solid transparent;
+            overflow: hidden;
+            animation: scaleIn 0.6s ease-out forwards;
+            opacity: 0;
+        }
+
+        .testimonial-card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .testimonial-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .testimonial-card:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .testimonial-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 50px rgba(57, 102, 173, 0.25),
+                        0 0 30px rgba(62, 179, 246, 0.15);
+            border-color: var(--secondary-color);
+        }
+
+        .testimonial-card:hover::after {
+            transform: scaleX(1);
+        }
+
+        .testimonial-card::before {
+            content: '"';
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            font-size: 6rem;
+            color: var(--secondary-color);
+            opacity: 0.3;
+            font-family: Georgia, serif;
+        }
+
+        .testimonial-text {
+            color: var(--text-dark);
+            font-style: italic;
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+            position: relative;
+            z-index: 1;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .testimonial-author-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 600;
+            font-size: 1.5rem;
+        }
+
+        .testimonial-author-info h4 {
+            color: var(--accent-color);
+            margin-bottom: 0.3rem;
+        }
+
+        .testimonial-author-info p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* Gallery */
+        .gallery {
+            background: var(--bg-light);
+            overflow: hidden;
+        }
+
+        .gallery-container {
+            position: relative;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            perspective: 1000px;
+            margin-top: 3rem;
+        }
+
+        .gallery-track {
+            display: flex;
+            gap: 2rem;
+            transform-style: preserve-3d;
+        }
+
+        .gallery-card {
+            width: 300px;
+            height: 350px;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(57, 102, 173, 0.3);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            position: relative;
+            border: 3px solid transparent;
+        }
+
+        .gallery-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(62, 179, 246, 0.2) 0%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .gallery-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-card:hover {
+            transform: translateY(-25px) scale(1.08);
+            box-shadow: 0 30px 70px rgba(57, 102, 173, 0.4),
+                        0 0 60px rgba(62, 179, 246, 0.3);
+            border-color: var(--secondary-color);
+        }
+
+        .gallery-card:hover::after {
+            opacity: 1;
+        }
+
+        .gallery-card:hover img {
+            transform: scale(1.1);
+        }
+
+        .gallery-item-placeholder {
+            background: var(--gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 1rem;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Galería móvil */
+        .gallery-mobile {
+            display: none;
+            padding: 2rem 0;
+            background: var(--bg-light);
+        }
+
+        .gallery-mobile-container {
+            overflow-x: auto;
+            padding: 1rem 0;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .gallery-mobile-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .gallery-mobile-track {
+            display: flex;
+            gap: 1rem;
+            padding: 0 1rem;
+            min-width: max-content;
+        }
+
+        .gallery-mobile-card {
+            width: 250px;
+            height: 300px;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            flex-shrink: 0;
+            transition: transform 0.3s;
+        }
+
+        .gallery-mobile-card:active {
+            transform: scale(0.98);
+        }
+
+        .gallery-mobile-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .gallery-mobile-hint {
+            text-align: center;
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            font-style: italic;
+            padding: 0 1rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: var(--gradient);
+            text-align: center;
+            color: var(--white);
+        }
+
+        .cta-section h2 {
+            color: var(--white);
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-section p {
+            font-size: 1.2rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.95;
+        }
+
+        /* Pricing Section */
+        .pricing-section {
+            background: var(--white);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+            margin-top: 3rem;
+            max-width: 1000px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .pricing-card {
+            background: linear-gradient(135deg, var(--white) 0%, var(--bg-light) 100%);
+            border-radius: 24px;
+            padding: 2.5rem;
+            position: relative;
+            border: 2px solid transparent;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            overflow: hidden;
+        }
+
+        .pricing-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(62, 179, 246, 0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .pricing-card:hover::before {
+            opacity: 1;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-12px) scale(1.03);
+            box-shadow: 0 25px 60px rgba(57, 102, 173, 0.3),
+                        0 0 50px rgba(62, 179, 246, 0.2);
+            border-color: var(--secondary-color);
+        }
+
+        .pricing-card.featured {
+            border-color: var(--secondary-color);
+            box-shadow: 0 10px 35px rgba(62, 179, 246, 0.3);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(62, 179, 246, 0.05) 100%);
+        }
+
+        .pricing-card.featured:hover {
+            box-shadow: 0 30px 70px rgba(62, 179, 246, 0.4),
+                        0 0 60px rgba(62, 179, 246, 0.3);
+        }
+
+        .pricing-badge {
+            position: absolute;
+            top: -15px;
+            right: 2rem;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            background-size: 200% 200%;
+            color: var(--white);
+            padding: 0.6rem 1.8rem;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            box-shadow: 0 6px 20px rgba(57, 102, 173, 0.4),
+                        0 0 15px rgba(62, 179, 246, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            animation: badge-pulse 2s ease infinite, gradient-shift 3s ease infinite;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        @keyframes badge-pulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 6px 20px rgba(57, 102, 173, 0.4),
+                            0 0 15px rgba(62, 179, 246, 0.3);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 8px 25px rgba(57, 102, 173, 0.5),
+                            0 0 20px rgba(62, 179, 246, 0.4);
+            }
+        }
+
+        .pricing-card:hover .pricing-badge {
+            animation: badge-pulse 1s ease infinite;
+            transform: scale(1.1);
+        }
+
+        .pricing-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-header h3 {
+            font-size: 2rem;
+            color: var(--accent-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-subtitle {
+            color: var(--text-light);
+            font-size: 1rem;
+        }
+
+        .pricing-content {
+            text-align: center;
+            padding: 1rem 0;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+
+        .pricing-features li {
+            padding: 0.8rem 0;
+            color: var(--text-dark);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .pricing-features li:last-child {
+            border-bottom: none;
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--secondary-color);
+            font-weight: bold;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .pricing-btn {
+            width: 100%;
+            margin-top: 1rem;
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .pricing-btn:hover {
+            animation: pulse-glow 1.5s ease infinite;
+            box-shadow: 0 15px 40px rgba(57, 102, 173, 0.5),
+                        0 0 30px rgba(62, 179, 246, 0.4);
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% {
+                box-shadow: 0 15px 40px rgba(57, 102, 173, 0.5),
+                            0 0 30px rgba(62, 179, 246, 0.4);
+            }
+            50% {
+                box-shadow: 0 20px 50px rgba(57, 102, 173, 0.6),
+                            0 0 40px rgba(62, 179, 246, 0.6);
+            }
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -1000px 0;
+            }
+            100% {
+                background-position: 1000px 0;
+            }
+        }
+
+        /* Smooth animations for cards on load */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        /* Links Section */
+        .links-section {
+            background: var(--bg-light);
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            background-color: var(--white);
+            padding: 80px 20px;
+        }
+
+        .faq-title {
+            text-align: center;
+            font-size: 2.5rem;
+            color: var(--accent-color);
+            margin-bottom: 3rem;
+            font-weight: 700;
+        }
+
+        .faq-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background: linear-gradient(135deg, var(--white) 0%, var(--bg-light) 100%);
+            border-radius: 16px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            border: 2px solid #e0e0e0;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 15px rgba(57, 102, 173, 0.08);
+        }
+
+        .faq-item:hover {
+            border-color: var(--primary-color);
+            box-shadow: 0 8px 30px rgba(57, 102, 173, 0.2);
+            transform: translateX(5px);
+        }
+
+        .faq-question {
+            width: 100%;
+            background: transparent;
+            border: none;
+            padding: 20px 25px;
+            text-align: left;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.4s ease;
+            font-family: 'Inter', sans-serif;
+            position: relative;
+        }
+
+        .faq-question::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
+            transform: scaleY(0);
+            transition: transform 0.4s ease;
+        }
+
+        .faq-question:hover {
+            background: linear-gradient(135deg, rgba(57, 102, 173, 0.05) 0%, rgba(62, 179, 246, 0.05) 100%);
+            color: var(--primary-color);
+            padding-left: 30px;
+        }
+
+        .faq-question:hover::before {
+            transform: scaleY(1);
+        }
+
+        .faq-question.active {
+            background: linear-gradient(135deg, rgba(57, 102, 173, 0.08) 0%, rgba(62, 179, 246, 0.08) 100%);
+            color: var(--primary-color);
+        }
+
+        .faq-question.active::before {
+            transform: scaleY(1);
+        }
+
+        .faq-icon {
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+            color: var(--primary-color);
+            font-weight: 300;
+            line-height: 1;
+        }
+
+        .faq-question.active .faq-icon {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            padding: 0 25px;
+            background: transparent;
+        }
+
+        .faq-answer.active {
+            max-height: 800px;
+            padding: 20px 25px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .faq-answer p {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+
+        .faq-answer p:last-child {
+            margin-bottom: 0;
+        }
+
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .link-card {
+            background: linear-gradient(135deg, var(--white) 0%, var(--bg-light) 100%);
+            padding: 2.5rem;
+            border-radius: 24px;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 2px solid transparent;
+            box-shadow: 0 8px 25px rgba(57, 102, 173, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .link-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(62, 179, 246, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .link-card:hover::after {
+            left: 100%;
+        }
+
+        .link-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 0 20px 50px rgba(57, 102, 173, 0.3),
+                        0 0 40px rgba(62, 179, 246, 0.2);
+            border-color: var(--secondary-color);
+            background: linear-gradient(135deg, var(--white) 0%, rgba(62, 179, 246, 0.05) 100%);
+        }
+
+        .link-card h3 {
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .link-card p {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+        }
+
+        .link-card .btn-primary {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .link-card .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.4), 
+                transparent);
+            transition: left 0.5s ease;
+        }
+
+        .link-card .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .link-card .btn-primary::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(62, 179, 246, 0.3) 0%, transparent 70%);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
+            z-index: -1;
+        }
+
+        .link-card .btn-primary:hover::after {
+            width: 300px;
+            height: 300px;
+        }
+
+        /* Newsletter Subscription */
+        .newsletter-section {
+            background: var(--bg-light);
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        .newsletter-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .newsletter-section h2 {
+            color: var(--accent-color);
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .newsletter-section p {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .newsletter-form-wrapper {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(57, 102, 173, 0.15);
+            margin-top: 2rem;
+            border: 2px solid rgba(57, 102, 173, 0.1);
+        }
+
+        .newsletter-form-wrapper iframe {
+            width: 100%;
+            max-width: 540px;
+            height: 305px;
+            border: none;
+            border-radius: 10px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--accent-color);
+            color: var(--white);
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+
+        footer p {
+            opacity: 0.9;
+        }
+
+        .footer-contact {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--white);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .footer-contact-item:hover {
+            opacity: 1;
+            transform: translateY(-2px);
+        }
+
+        .footer-contact-item svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        .footer-contact-item:hover svg {
+            transform: scale(1.1);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 0.75rem 1rem;
+            }
+
+            .logo {
+                height: 60px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding-top: 70px;
+                min-height: 90vh;
+            }
+
+            .hero-content {
+                padding: 2rem 1.5rem;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+                margin-bottom: 1rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .instructor-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .instructor-photo img {
+                max-width: 100%;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .feature-card {
+                padding: 2rem;
+            }
+
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .pricing-card {
+                padding: 2rem;
+            }
+
+
+            /* Alternar galerías en tablet/móvil */
+            .gallery {
+                display: none;
+            }
+
+            .gallery-mobile {
+                display: block;
+            }
+
+            .gallery-mobile-card {
+                width: 200px;
+                height: 240px;
+            }
+
+            .gallery-mobile-hint {
+                font-size: 0.8rem;
+            }
+
+            .links-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .videos-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .newsletter-section {
+                padding: 3rem 1.5rem;
+            }
+
+            .newsletter-section h2 {
+                font-size: 1.5rem;
+            }
+
+            .newsletter-section p {
+                font-size: 1rem;
+            }
+
+            .newsletter-form-wrapper {
+                padding: 1.5rem;
+            }
+
+            .newsletter-form-wrapper iframe {
+                height: 400px;
+            }
+
+            .footer-contact {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .modalities-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .modality-card {
+                padding: 2rem;
+            }
+
+            .faq-title {
+                font-size: 2rem;
+            }
+
+            .faq-question {
+                font-size: 1rem;
+                padding: 15px 20px;
+            }
+
+            .faq-answer {
+                padding: 0 20px;
+            }
+
+            .faq-answer.active {
+                padding: 15px 20px;
+            }
+
+            .newsletter-section {
+                padding: 3rem 1.5rem;
+            }
+
+            .newsletter-section h2 {
+                font-size: 1.5rem;
+            }
+
+            .newsletter-section p {
+                font-size: 1rem;
+            }
+
+            .newsletter-form-wrapper {
+                padding: 1.5rem;
+            }
+
+            .newsletter-form-wrapper iframe {
+                height: 400px;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 1rem;
+            }
+
+            .btn {
+                width: 100%;
+                padding: 0.875rem 2rem;
+                font-size: 1rem;
+            }
+
+            section {
+                padding: 4rem 1.5rem;
+            }
+
+            .container {
+                padding: 0;
+            }
+
+            .section-title {
+                font-size: 1.75rem;
+            }
+
+            .section-subtitle {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+
+            .pricing-price .amount {
+                font-size: 2rem;
+            }
+
+            .feature-icon {
+                width: 48px;
+                height: 48px;
+            }
+        }
+
+        /* Smooth Scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes rotateIn {
+            from {
+                opacity: 0;
+                transform: rotate(-10deg) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: rotate(0deg) scale(1);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes shimmer-text {
+            0% {
+                background-position: -200% center;
+            }
+            100% {
+                background-position: 200% center;
+            }
+        }
+
+        @keyframes gradient-shift {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.8s ease-out forwards;
+            opacity: 0;
+        }
+
+        .slide-in-left {
+            animation: slideInLeft 0.8s ease-out forwards;
+            opacity: 0;
+        }
+
+        .slide-in-right {
+            animation: slideInRight 0.8s ease-out forwards;
+            opacity: 0;
+        }
+
+        .scale-in {
+            animation: scaleIn 0.6s ease-out forwards;
+            opacity: 0;
+        }
+
+        .rotate-in {
+            animation: rotateIn 0.7s ease-out forwards;
+            opacity: 0;
+        }
+
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .pulse-animation {
+            animation: pulse 2s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <img src="logo/TEN-Transparente.png" alt="TEN Logo" class="logo">
+            <ul class="nav-links">
+                <li><a href="#curso">Curso</a></li>
+                <li><a href="#instructor">Instructor</a></li>
+                <li><a href="#videos">Videos</a></li>
+                <li><a href="#testimonios">Testimonios</a></li>
+                <li><a href="#galeria">Galería</a></li>
+                <li><a href="#planes">Planes</a></li>
+                <li><a href="#evaluacion">Evaluación</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Formación en Excel para Entrenadores de Natación</h1>
+            <p>Optimiza la planificación de tus clases, gestiona asistencias, registra tiempos, analiza y crea bases de datos profesionales para llevar tu entrenamiento y tus nadadores al siguiente nivel.</p>
+            <div class="cta-buttons">
+                <a href="docs/contenido-del-curso.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-primary" download>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    Descarga el contenido del curso
+                </a>
+                <a href="#evaluacion" class="btn btn-secondary">Evaluación de Conocimientos</a>
+            </div>
+        </div>
+        </section>
+
+    <!-- Modalities Section -->
+    <section id="modalidades" class="modalities-section">
+        <div class="container">
+            <h2 class="section-title">Modalidades Disponibles</h2>
+            <p class="section-subtitle">Elige la modalidad que mejor se adapte a tu disponibilidad y ritmo de aprendizaje</p>
+            
+            <div class="modalities-grid">
+                <div class="modality-card">
+                    <div class="modality-badge">Síncrona</div>
+                    <div class="modality-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                    </div>
+                    <h3>Modalidad Síncrona</h3>
+                    <div class="modality-date">Próximo inicio: DD-MM-AÑO</div>
+                    <p>Participa en clases en vivo. Interactúa en tiempo real con el instructor y otros participantes. Ideal si prefieres un aprendizaje guiado y estructurado.</p>
+                </div>
+                
+                <div class="modality-card">
+                    <div class="modality-badge">Online</div>
+                    <div class="modality-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                            <line x1="8" y1="21" x2="16" y2="21"></line>
+                            <line x1="12" y1="17" x2="12" y2="21"></line>
+                        </svg>
+                    </div>
+                    <h3>Modalidad Online</h3>
+                    <div class="modality-date">A tu ritmo</div>
+                    <p>Accede a todos los videos del curso en la plataforma Hotmart. Estudia cuando quieras, a tu propio ritmo y desde cualquier lugar. Los videos están disponibles permanentemente.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Course Features -->
+    <section id="curso" class="features">
+        <div class="container">
+            <h2 class="section-title">¿Qué Aprenderás?</h2>
+            <p class="section-subtitle">Herramientas profesionales de Excel diseñadas específicamente para entrenadores de natación</p>
+            
+            <div class="features-grid">
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                </div>
+                    <h3>Planificación de Clases</h3>
+                    <p>Crea calendarios detallados, organiza sesiones de entrenamiento y gestiona múltiples grupos de manera eficiente.</p>
+                </div>
+                
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
+                </div>
+                    <h3>Control de Asistencias</h3>
+                    <p>Lleva un registro preciso de la asistencia de tus nadadores con sistemas automatizados y reportes instantáneos.</p>
+                </div>
+                
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                </div>
+                    <h3>Registro de Tiempos</h3>
+                    <p>Analiza y compara tiempos de manera profesional, identifica mejoras y establece objetivos personalizados.</p>
+                </div>
+                
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="20" x2="18" y2="10"></line>
+                            <line x1="12" y1="20" x2="12" y2="4"></line>
+                            <line x1="6" y1="20" x2="6" y2="14"></line>
+                        </svg>
+                </div>
+                    <h3>Bases de Datos de Entrenamiento</h3>
+                    <p>Construye sistemas completos para almacenar y analizar datos históricos de entrenamiento y rendimiento.</p>
+                </div>
+                
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                            <polyline points="17 6 23 6 23 12"></polyline>
+                        </svg>
+            </div>
+                    <h3>Análisis y Reportes</h3>
+                    <p>Genera gráficos profesionales y reportes detallados para evaluar el progreso de tus atletas.</p>
+                </div>
+                
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <circle cx="12" cy="12" r="6"></circle>
+                            <circle cx="12" cy="12" r="2"></circle>
+                        </svg>
+                </div>
+                    <h3>Gestión de Objetivos</h3>
+                    <p>Establece y monitorea objetivos de rendimiento con herramientas de seguimiento avanzadas.</p>
+                </div>
+                </div>
+            </div>
+        </section>
+
+    <!-- Instructor Section -->
+    <section id="instructor" class="instructor">
+        <div class="container">
+            <h2 class="section-title">El Instructor</h2>
+            <p class="section-subtitle">Conoce a quien te guiará en este proceso de aprendizaje</p>
+            
+            <div class="instructor-content">
+                <div class="instructor-photo">
+                    <img src="images/revc.jpg" alt="Raúl Vicuña Cufat">
+                </div>
+                
+                <div class="instructor-bio">
+                    <h3>Raúl Vicuña Cufat</h3>
+                    <p>
+                        Con una amplia trayectoria en el mundo de la natación y la enseñanza, Raúl Vicuña Cufat ha dedicado su carrera a perfeccionar las metodologías de entrenamiento y gestión deportiva.
+                    </p>
+                    <p>
+                        Su experiencia combinada en natación competitiva y tecnología le ha permitido desarrollar sistemas innovadores que optimizan la planificación y el seguimiento del rendimiento de los atletas.
+                    </p>
+                    <p>
+                        A través de este curso, compartirá sus conocimientos y técnicas probadas para que puedas llevar tu gestión como entrenador a un nivel profesional, utilizando Excel como herramienta principal.
+                    </p>
+                    <p>
+                        Entrenador Deportivo con enfasis en Natación desde hace más de 20 años. Complementa su quehacer con la enseñanza de Excel en diferentes sectores cómo Agroindustria, Energía, Deportes haciendo parte del programa de capacitación de <a href="https://hotmart.com/es/club/claudia-milena-serpa-imbett" target="_blank" rel="noopener noreferrer">AgTech Program</a> de DR-Innova SAS (ver los cursos), ahora en convenio con su marca Tu Entrenamiento de Natación -TEN.
+                    </p>
+                </div>
+            </div>
+        </div>
+        </section>
+
+    <!-- Videos Section -->
+    <section id="videos" class="videos-section">
+        <div class="container">
+            <h2 class="section-title">Videos del Curso</h2>
+            <p class="section-subtitle">Conoce más sobre el curso a través de nuestros videos de presentación y recursos</p>
+            
+            <div class="videos-grid">
+                <div class="video-card">
+                    <div class="video-wrapper">
+                        <video controls preload="metadata">
+                            <source src="videos/Dividir Texo con Formula.mp4" type="video/mp4">
+                            Tu navegador no soporta el elemento de video.
+                        </video>
+                    </div>
+                    <div class="video-info">
+                        <h3>Dividir Texto con Fórmula</h3>
+                        <p>Aprende técnicas avanzadas de Excel para dividir y manipular texto usando fórmulas útiles para la gestión de datos de entrenamiento.</p>
+                    </div>
+                </div>
+                
+                <div class="video-card">
+                    <div class="video-wrapper">
+                        <video controls preload="metadata">
+                            <source src="videos/Prueba1 con Narracion y texto.mp4" type="video/mp4">
+                            Tu navegador no soporta el elemento de video.
+                        </video>
+                    </div>
+                    <div class="video-info">
+                        <h3>Recursos y Ejemplos Prácticos</h3>
+                        <p>Video con narración y ejemplos prácticos sobre cómo utilizar Excel para gestionar eficientemente tus entrenamientos de natación.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </section>
+
+    <!-- Testimonials -->
+    <section id="testimonios" class="testimonials">
+        <div class="container">
+            <h2 class="section-title">Testimonios</h2>
+            <p class="section-subtitle">Lo que dicen quienes han tomado el curso</p>
+            
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <p class="testimonial-text">
+                        Este curso transformó completamente mi forma de gestionar los entrenamientos. Ahora puedo planificar mis clases con mucha más precisión y mis nadadores han mejorado significativamente.
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-author-avatar">MC</div>
+                        <div class="testimonial-author-info">
+                            <h4>María González</h4>
+                            <p>Entrenadora de Natación</p>
+            </div>
+        </div>
+    </div>
+
+                <div class="testimonial-card">
+                    <p class="testimonial-text">
+                        Las herramientas que enseña Raúl conectan lo básico con la gestión avanzada de datos. Su dominio de Excel fortalece las formaciones de AgTech-Program y responde a las exigencias de la era digital. Como entrenadores de natación, los invito a aplicar este conocimiento para optimizar sus entrenamientos.
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-author-avatar">CS</div>
+                        <div class="testimonial-author-info">
+                            <h4>Claudia Serpa Imbett</h4>
+                            <p>PhD, Directora Académica de AgTech Program</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <p class="testimonial-text">
+                        Excelente curso, muy bien estructurado. Raúl explica todo de manera clara y práctica. Definitivamente lo recomiendo a todos los entrenadores que quieren profesionalizar su trabajo.
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-author-avatar">AL</div>
+                        <div class="testimonial-author-info">
+                            <h4>Elyana Suarez</h4>
+                            <p>Entrenadora de Natación Club NGN</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Subscription -->
+    <section class="newsletter-section" id="suscribete">
+        <div class="container">
+            <div class="newsletter-content">
+                <h2>Suscríbete y Recibe Información</h2>
+                <p>Mantente al día con nuestras publicaciones de Instagram, noticias de natación, información sobre cursos, videos virtuales y más contenido exclusivo.</p>
+                
+                <div class="newsletter-form-wrapper">
+                    <iframe width="540" height="305" src="https://d22ced48.sibforms.com/serve/MUIFAGiePinnijuuBpWYVxZtAkDzwlrVbIoSNWjDSUzsPIpyYrw7dKKelReIGy-Ed67NwnLiMgWWWYJpFeL73V8JMcws15UBt05rSkxdOlwCw4HhVR8b8qGq78HYUjyrGYg7y5FB8BkEgJpYkU3ua9uirnWTmC3ZWflzyVqiBdOGB8Zn4lHDpGXeSjB14YZmwYdWtTK7OBpe5OiT" frameborder="0" scrolling="auto" allowfullscreen style="display: block;margin-left: auto;margin-right: auto;max-width: 100%;"></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery -->
+    <section id="galeria" class="gallery">
+        <div class="container">
+            <h2 class="section-title">Galería de Clases</h2>
+            <p class="section-subtitle">Momentos de aprendizaje y práctica en nuestras sesiones</p>
+            
+            <div class="gallery-container">
+                <div class="gallery-track">
+                    <div class="gallery-card">
+                        <img src="images/imagen1.png" alt="Clase de Excel para entrenadores de natación" onerror="this.parentElement.innerHTML='<div class=\'gallery-item-placeholder\'>Foto de Clase 1</div>'">
+                    </div>
+                    <div class="gallery-card">
+                        <img src="images/imagen2.png" alt="Entrenamiento con Excel" onerror="this.parentElement.innerHTML='<div class=\'gallery-item-placeholder\'>Foto de Clase 2</div>'">
+                    </div>
+                    <div class="gallery-card">
+                        <img src="images/imagen3.png" alt="Planificación de entrenamientos" onerror="this.parentElement.innerHTML='<div class=\'gallery-item-placeholder\'>Foto de Clase 3</div>'">
+                    </div>
+                    <div class="gallery-card">
+                        <img src="images/imagen4.png" alt="Gestión de datos de natación" onerror="this.parentElement.innerHTML='<div class=\'gallery-item-placeholder\'>Foto de Clase 4</div>'">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Galería Móvil -->
+    <section class="gallery-mobile" id="galeria-mobile">
+        <div class="container">
+            <h2 class="section-title">Galería de Clases</h2>
+            <p class="section-subtitle">Momentos de aprendizaje y práctica en nuestras sesiones</p>
+            <div class="gallery-mobile-container">
+                <div class="gallery-mobile-track">
+                    <div class="gallery-mobile-card">
+                        <img src="images/imagen1.png" alt="Clase de Excel para entrenadores de natación" onerror="this.parentElement.innerHTML='<div class=\'gallery-item-placeholder\'>Foto de Clase 1</div>'">
+                    </div>
+                    <div class="gallery-mobile-card">
+                        <img src="images/imagen2.png" alt="Entrenamiento con Excel" onerror="this.parentElement.innerHTML='<div class=\'gallery-item-placeholder\'>Foto de Clase 2</div>'">
+                    </div>
+                    <div class="gallery-mobile-card">
+                        <img src="images/imagen3.png" alt="Planificación de entrenamientos" onerror="this.parentElement.innerHTML='<div class=\'gallery-item-placeholder\'>Foto de Clase 3</div>'">
+                    </div>
+                    <div class="gallery-mobile-card">
+                        <img src="images/imagen4.png" alt="Gestión de datos de natación" onerror="this.parentElement.innerHTML='<div class=\'gallery-item-placeholder\'>Foto de Clase 4</div>'">
+                    </div>
+                </div>
+            </div>
+            <p class="gallery-mobile-hint">👈 Desliza horizontalmente para ver más fotos</p>
+        </div>
+    </section>
+
+    <!-- Pricing Plans -->
+    <section id="planes" class="pricing-section">
+        <div class="container">
+            <h2 class="section-title">Planes Disponibles</h2>
+            <p class="section-subtitle">Elige el plan que mejor se adapte a tus necesidades</p>
+            
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <h3>Plan Personal</h3>
+                        <p class="pricing-subtitle">Ideal para entrenadores individuales</p>
+                    </div>
+                    <div class="pricing-content">
+                        <ul class="pricing-features">
+                            <li>Acceso completo al curso</li>
+                            <li>Materiales descargables</li>
+                            <li>Soporte por email</li>
+                            <li>Certificado de finalización</li>
+                        </ul>
+                        <a href="#" class="btn btn-primary pricing-btn" data-plan="personal-persona">Inscribirse</a>
+                    </div>
+                </div>
+                
+                <div class="pricing-card featured">
+                    <div class="pricing-badge">Recomendado</div>
+                    <div class="pricing-header">
+                        <h3>Plan Empresarial</h3>
+                        <p class="pricing-subtitle">Para equipos de hasta 10 personas</p>
+                    </div>
+                    <div class="pricing-content">
+                        <ul class="pricing-features">
+                            <li>Todo lo del Plan Personal</li>
+                            <li>Precio especial para grupos</li>
+                            <li>Soporte prioritario</li>
+                            <li>Capacitación personalizada</li>
+                            <li>Sesión grupal incluida</li>
+                            <li>Reportes consolidados</li>
+                        </ul>
+                        <a href="#" class="btn btn-primary pricing-btn" data-plan="empresarial-grupo">Inscribirse</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Links Section -->
+    <section id="evaluacion" class="links-section">
+        <div class="container">
+            <h2 class="section-title">Comienza Tu Camino</h2>
+            <p class="section-subtitle">Evalúa tus conocimientos y únete al curso</p>
+            
+            <div class="links-grid">
+                <div class="link-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <polyline points="10 9 9 9 8 9"></polyline>
+                        </svg>
+                    </div>
+                    <h3>Evaluación de Conocimientos Previos</h3>
+                    <p>Comprueba tu nivel actual de Excel e inicia tu formación con nosotros.</p>
+                    <a href="cuestionario.html" class="btn btn-primary">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <line x1="16" y1="13" x2="8" y2="13"/>
+                            <line x1="16" y1="17" x2="8" y2="17"/>
+                        </svg>
+                        Realizar Evaluación
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section" id="faq">
+        <div class="container">
+            <h2 class="faq-title">Preguntas Frecuentes</h2>
+            
+            <div class="faq-container">
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        <span>¿Necesito tener conocimientos avanzados de Excel para tomar el curso?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>No es necesario tener conocimientos avanzados de Excel. El curso está diseñado para entrenadores de natación que quieren mejorar su gestión de datos. Comenzamos desde conceptos básicos y avanzamos progresivamente hacia técnicas más especializadas para planificación, asistencia, tiempos y bases de datos de entrenamiento.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        <span>¿Qué incluye exactamente el curso?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>El curso incluye: plantillas de Excel para planificación de clases, sistemas de registro de asistencia, gestión de tiempos de natación, bases de datos para entrenamientos, análisis de rendimiento de nadadores, materiales descargables, acceso permanente a los recursos, soporte por email y certificado de finalización.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        <span>¿Cómo funciona el Plan Empresarial para grupos?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>El Plan Empresarial está diseñado para equipos de hasta 10 personas. Incluye todos los beneficios del Plan Personal, además de sesión grupal de capacitación personalizada, soporte prioritario, reportes consolidados y precio especial por grupo. Ideal para clubes de natación y equipos de entrenadores.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        <span>¿Recibiré certificado al completar el curso?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Sí, al completar el curso recibirás un certificado digital de finalización que podrás incluir en tu currículum y compartir en tus redes profesionales.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        <span>¿Puedo acceder al curso después de inscribirme?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Sí, una vez inscrito a través de Hotmart, tendrás acceso permanente a todos los materiales del curso hasta por tres semanas. Puedes avanzar a tu propio ritmo y revisar el contenido las veces que necesites.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        <span>¿Qué temas específicos cubre el curso?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>El curso cubre: planificación de clases de natación con Excel, sistemas de registro de asistencia de nadadores, gestión y análisis de tiempos de natación, creación de bases de datos para entrenamientos, análisis de rendimiento y progresión de nadadores, generación de reportes profesionales, y técnicas avanzadas de Excel aplicadas específicamente a la gestión deportiva.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        <span>¿Puedo aplicar lo aprendido inmediatamente en mi trabajo?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>¡Absolutamente! El curso está diseñado con un enfoque práctico y aplicable. Desde las primeras lecciones comenzarás a usar plantillas y sistemas que podrás implementar directamente en tu trabajo diario como entrenador. Todas las herramientas están pensadas para resolver problemas reales de gestión deportiva.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        <span>¿Hay evaluación previa antes de inscribirme?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Sí, ofrecemos una evaluación de conocimientos previos que puedes realizar de forma gratuita. Esta evaluación te ayudará a determinar tu nivel actual. Puedes acceder a ella desde la sección "Comienza Tu Camino" en esta página.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 TEN - Excel para Entrenadores de Natación. Todos los derechos reservados.</p>
+            
+            <div class="footer-contact">
+                <a href="https://www.instagram.com/tuentrenamientodenatacion/" target="_blank" rel="noopener noreferrer" class="footer-contact-item">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                    </svg>
+                    <span>@tuentrenamientodenatacion</span>
+                </a>
+                
+                <a href="https://wa.me/573196583574" target="_blank" rel="noopener noreferrer" class="footer-contact-item">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+                    </svg>
+                    <span>+57 319 658 3574</span>
+                </a>
+                
+                <span class="footer-contact-item" style="cursor: default;">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                    </svg>
+                    <span>Colombia</span>
+                </span>
+            </div>
+            
+            <p style="margin-top: 2rem; font-size: 0.9rem;">
+                <a href="politica-privacidad.html" style="color: rgba(255,255,255,0.8); text-decoration: underline;">Política de Privacidad</a>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add fade-in animation on scroll with staggered animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    const element = entry.target;
+                    
+                    // Remove existing animation classes
+                    element.classList.remove('fade-in', 'slide-in-left', 'slide-in-right', 'scale-in', 'rotate-in');
+                    
+                    // Add appropriate animation based on element type
+                    if (element.classList.contains('feature-card')) {
+                        const delay = index * 0.1;
+                        setTimeout(() => {
+                            element.classList.add('fade-in');
+                        }, delay * 1000);
+                    } else if (element.classList.contains('pricing-card')) {
+                        element.classList.add('scale-in');
+                    } else if (element.classList.contains('video-card')) {
+                        element.classList.add('slide-in-left');
+                    } else if (element.classList.contains('link-card')) {
+                        element.classList.add('slide-in-right');
+                    } else {
+                        element.classList.add('fade-in');
+                    }
+                }
+            });
+        }, observerOptions);
+
+        // Observe section titles for underline animation
+        document.querySelectorAll('.section-title').forEach(title => {
+            const titleObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate');
+                    }
+                });
+            }, { threshold: 0.5 });
+            titleObserver.observe(title);
+        });
+
+        document.querySelectorAll('.feature-card, .testimonial-card, .link-card, .pricing-card, .video-card, .modality-card').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Animación de la galería tipo baraja
+        const galleryTrack = document.querySelector('.gallery-track');
+        if (galleryTrack) {
+            const cards = document.querySelectorAll('.gallery-card');
+            let currentIndex = 0;
+
+            function updateGallery() {
+                cards.forEach((card, index) => {
+                    const offset = index - currentIndex;
+                    card.style.transform = `translateX(${offset * 320}px) translateZ(${Math.abs(offset) * -100}px) rotateY(${offset * -15}deg)`;
+                    card.style.opacity = Math.abs(offset) > 2 ? '0' : '1';
+                });
+            }
+
+            // Auto-rotar galería
+            setInterval(() => {
+                if (cards.length > 0) {
+                    currentIndex = (currentIndex + 1) % cards.length;
+                    updateGallery();
+                }
+            }, 3000);
+
+            // Click en las tarjetas de la galería
+            cards.forEach((card, index) => {
+                card.addEventListener('click', () => {
+                    currentIndex = index;
+                    updateGallery();
+                });
+            });
+
+            updateGallery();
+        }
+
+        // Hotmart links configuration - Update these with your actual Hotmart links
+        const hotmartLinks = {
+            'personal-persona': 'https://pay.hotmart.com/personal-persona',
+            'empresarial-grupo': 'https://pay.hotmart.com/empresarial-grupo'
+        };
+
+        // Handle pricing buttons
+        document.querySelectorAll('.pricing-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const plan = this.getAttribute('data-plan');
+                const link = hotmartLinks[plan];
+                if (link) {
+                    window.open(link, '_blank');
+                }
+            });
+        });
+
+        // FAQ Toggle Function
+        function toggleFaq(button) {
+            const answer = button.nextElementSibling;
+            const isActive = button.classList.contains('active');
+
+            // Close all FAQs
+            document.querySelectorAll('.faq-question').forEach(q => {
+                q.classList.remove('active');
+                q.nextElementSibling.classList.remove('active');
+            });
+
+            // Open clicked FAQ if it wasn't active
+            if (!isActive) {
+                button.classList.add('active');
+                answer.classList.add('active');
+            }
+        }
+
+        // Header scroll effect
+        let lastScroll = 0;
+        const header = document.querySelector('header');
+        
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll > 100) {
+                header.style.boxShadow = '0 2px 30px rgba(0, 0, 0, 0.1)';
+                } else {
+                header.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.05)';
+            }
+            
+            lastScroll = currentScroll;
+        });
+    </script>
+</body>
+</html>
+
+
